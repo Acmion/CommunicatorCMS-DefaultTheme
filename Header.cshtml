@@ -1,0 +1,180 @@
+﻿@using System.Net.Http;
+@using CommunicatorCms.Core.Settings;
+@using CommunicatorCms.Core.Actions;
+@using Utf8Json;
+@using CommunicatorCms.Core;
+@using CommunicatorCms;
+@using CommunicatorCms.Core.AppFileSystem;
+
+@inject RequestState RequestState;
+
+@functions{
+
+    private int _cbIdSuffix = 0;
+
+    public async Task RenderNavigationItem(SourcePage sourcePage, SourcePage activePage, int maxDepth = -1)
+    {
+        if (!sourcePage.Properties.ShowInNavigationMenus)
+        {
+            return;
+        }
+
+        if (sourcePage.PropertiesLayout.NavItemSpacerBefore != 0)
+        {
+            <div style="flex: @sourcePage.PropertiesLayout.NavItemSpacerBefore.ToString(App.AmericanCultureInfo)">
+            </div>
+        }
+
+        var activeClass = "";
+        var checkedAttribute = "";
+
+        if (sourcePage.Url == activePage.Url)
+        {
+            activeClass = "hn-active";
+            checkedAttribute = "checked";
+        }
+        else if (sourcePage.Url != "/" && AppPath.IsParentUrl(sourcePage.Url, activePage.Url)) 
+        {
+            activeClass = "hn-active-child";
+            checkedAttribute = "checked";
+        }
+
+        var subPages = await sourcePage.GetSubPages();
+
+        if (subPages.Count == 0 || maxDepth == 0)
+        {
+            <a class="hn-item @activeClass @sourcePage.PropertiesLayout.NavItemCssClasses" style="@sourcePage.PropertiesLayout.NavItemCssInline" href="@sourcePage.Url">
+
+                @{
+                    if (!string.IsNullOrEmpty(sourcePage.Properties.Icon))
+                    {
+                        <span class="hn-icon">
+                            @sourcePage.Properties.Icon
+                        </span>
+                    }
+                }
+                <span class="hn-content" data-content="@sourcePage.Properties.Title">
+                    @sourcePage.Properties.Title
+                </span>
+            </a>
+        }
+        else
+        {
+            _cbIdSuffix++;
+            <div class="hn-expand @sourcePage.PropertiesLayout.NavExpandCssClasses" style="@sourcePage.PropertiesLayout.NavExpandCssInline">
+                <input type="checkbox" id="nav-cb@_cbIdSuffix" class="hn-checkbox" >
+
+                
+                <div class="hn-item @activeClass @sourcePage.PropertiesLayout.NavItemCssClasses" style="@sourcePage.PropertiesLayout.NavItemCssInline">
+                    <a class="hn-link" href="@sourcePage.Url">
+                        @{
+                            if (!string.IsNullOrEmpty(sourcePage.Properties.Icon))
+                            {
+                                <span class="hn-icon">
+                                    @sourcePage.Properties.Icon
+                                </span>
+                            }
+                        }
+                        <span class="hn-content" data-content="@sourcePage.Properties.Title">
+                            @sourcePage.Properties.Title
+                        </span>
+                    </a>
+
+                    <label for="nav-cb@_cbIdSuffix" class="hn-input">
+                        <span class="hn-input-default">
+                            <i class="ri-add-line"></i>
+                        </span>
+                        <span class="hn-input-active">
+                            <i class="ri-subtract-line"></i>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="hn-expand-body">
+                    @{
+                        maxDepth--;
+                        foreach (var subPage in subPages)
+                        {
+                            await RenderNavigationItem(subPage, activePage, maxDepth);
+                        }
+                    }
+                </div>
+
+            </div>
+        }
+
+        if (sourcePage.PropertiesLayout.NavItemSpacerAfter != 0)
+        {
+            <div style="flex: @sourcePage.PropertiesLayout.NavItemSpacerAfter.ToString(App.AmericanCultureInfo)">
+            </div>
+        }
+    }
+}
+
+@{
+    var rootPage = await RequestState.GetPageByUrl("/");
+    var activePage = await RequestState.GetCurrentPage();
+}
+
+@{
+    if (activePage.Properties.ShowTopNavigationMenu)
+    {
+        <nav class="hyper-nav hn-top hn-fixed">
+            <input type="checkbox" id="hn-expand-button" class="hn-checkbox hn-checkbox-nav hn-hide-desktop">
+            <div class="hn-nav container">
+                <div class="hn-section hn-section-brand">
+                    @{
+                        if (AppSettings.LogoContent != "")
+                        {
+                            <div class="hn-item">
+                                <span class="hn-icon">
+                                    @Html.Raw(AppSettings.LogoContent)
+                                </span>
+                            </div>
+                        }
+                    }
+
+                    <a class="hn-item" href="/">
+                        <span class="hn-icon">
+                            <img src="~/static/communicator-cms/icon.svg" style="height: 3.2rem">
+                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
+                                &nbsp;CommunicatorCMS
+                            </span>
+                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
+                                &#xe000;
+                            </span>
+                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
+                                Adamantica
+                            </span>
+
+
+                        </span>
+                    </a>
+
+                    <label for="hn-expand-button" class="hn-item hn-input hn-hide-desktop">
+                        <span class="hn-icon">
+                            <span class="hn-input-default">
+                                <i class="ri-menu-line"></i>
+                            </span>
+                            <span class="hn-input-active">
+                                <i class="ri-close-line"></i>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="hn-section hn-section-body">
+                    @{
+                        await RenderNavigationItem(rootPage, activePage, 0);
+
+                        foreach (var subPage in await rootPage.GetSubPages())
+                        {
+                            await RenderNavigationItem(subPage, activePage);
+                        }
+                    }
+                </div>
+            </div>
+            <label class="hn-overlay hn-overlay-nav hn-hide-desktop" for="hn-expand-button">
+            </label>
+        </nav>
+    }
+}
