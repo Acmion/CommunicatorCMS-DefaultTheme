@@ -145,29 +145,8 @@
         }
 
         <div class="column content">
-            @{
-
-                foreach (var cfp in currentPage.ContentFileAppPaths)
-                {
-                    if (cfp.EndsWith(".cshtml"))
-                    {
-                        await Html.RenderPartialAsync(cfp);
-                    }
-                    else
-                    {
-                        var content = await AppFile.ReadAllTextAsync(cfp);
-
-                        if (cfp.EndsWith(".md"))
-                        {
-                            @Html.Raw(Markdown.ToHtml(content));
-                        }
-                        else 
-                        {
-                            @Html.Raw(content);
-
-                        }
-                    }
-                }
+            @{ 
+                await currentPage.Render(this, this.Html);
             }
         </div>
     </div>

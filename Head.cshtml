@@ -1,4 +1,7 @@
-﻿<meta name="viewport" content="width=device-width, initial-scale=1">
+﻿@using CommunicatorCms.Core;
+@using CommunicatorCms.Core.Settings;
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/bulmaswatch/cyborg/bulmaswatch.min.css" />
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/remixicon/remixicon.css" />
@@ -12,3 +15,7 @@
 <script>
     cssVars();
 </script>
+
+@{ 
+    var headContent = await SourcePage.LoadPageFromAppPath(GeneralSettings.WebHeadPath);
+}

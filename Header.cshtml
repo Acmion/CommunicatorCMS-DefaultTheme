@@ -126,30 +126,13 @@
                     @{
                         if (AppSettings.LogoContent != "")
                         {
-                            <div class="hn-item">
+                            <a class="hn-item" href="/">
                                 <span class="hn-icon">
                                     @Html.Raw(AppSettings.LogoContent)
                                 </span>
-                            </div>
+                            </a>
                         }
                     }
-
-                    <a class="hn-item" href="/">
-                        <span class="hn-icon">
-                            <img src="~/static/communicator-cms/icon.svg" style="height: 3.2rem">
-                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
-                                &nbsp;CommunicatorCMS
-                            </span>
-                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
-                                &#xe000;
-                            </span>
-                            <span style="font-weight: normal; font-size: 2.2rem; line-height: 0; font-family: Negatronic; ">
-                                Adamantica
-                            </span>
-
-
-                        </span>
-                    </a>
 
                     <label for="hn-expand-button" class="hn-item hn-input hn-hide-desktop">
                         <span class="hn-icon">
