@@ -118,39 +118,51 @@
     var a = 0;
 }
 
-<div class="container" style="padding-top: 7rem; font-size: 1.6rem; overflow: hidden">
-    <div class="columns">
+@{
+    if (currentPage.Properties.Layout == "LandingPage")
+    {
+        await currentPage.Render(this, this.Html);
+    }
+    else
+    {
+        <div class="container" style="padding-top: 7rem; font-size: 1.6rem; overflow: hidden">
+            <div class="columns">
 
-        @{
-            if (currentPage.Properties.ShowSideNavigationMenu)
-            {
-                <div class="column is-one-fifth">
-                    <nav class="hyper-nav hn-side" style="width: 100%">
-                        <div class="hn-nav">
-                            <div class="hn-section hn-section-body">
-                                @{
-                                    await RenderNavigationItem(currentActiveTopPage, currentPage, 0);
+                @{
+                    if (currentPage.Properties.ShowSideNavigationMenu)
+                    {
+                        <div class="column is-one-fifth">
+                            <nav class="hyper-nav hn-side" style="width: 100%">
+                                <div class="hn-nav">
+                                    <div class="hn-section hn-section-body">
+                                        @{
+                                            await RenderNavigationItem(currentActiveTopPage, currentPage, 0);
 
-                                    foreach (var subPage in await currentActiveTopPage.GetSubPages())
-                                    {
-                                        await RenderNavigationItem(subPage, currentPage);
-                                    }
-                                }
-                            </div>
+                                            foreach (var subPage in await currentActiveTopPage.GetSubPages())
+                                            {
+                                                await RenderNavigationItem(subPage, currentPage);
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </nav>
                         </div>
-                    </nav>
+                    }
+
+                }
+
+                <div class="column content">
+                    @{
+                        await currentPage.Render(this, this.Html);
+                    }
                 </div>
-            }
-
-        }
-
-        <div class="column content">
-            @{ 
-                await currentPage.Render(this, this.Html);
-            }
+            </div>
         </div>
-    </div>
-</div>
+    }
+
+}
+
+
 
 
 
