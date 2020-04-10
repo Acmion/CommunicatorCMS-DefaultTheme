@@ -3,7 +3,8 @@
 
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/bulmaswatch/cyborg/bulmaswatch.min.css" />
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/remixicon/remixicon.css" />
-<link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/HyperNav/dist/hyper-nav-without-css-vars.css" />
+<link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/HyperNav/dist/hyper-nav-css-vars.min.css" />
+<link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/HyperNav/dist/hyper-nav-without-css-vars.min.css" />
 
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/css/main.css" />
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/css/bulma-override.css" />
@@ -15,6 +16,6 @@
     cssVars();
 </script>
 
-@{ 
+@{
     var headContent = await SourcePage.LoadPageFromAppPath(GeneralSettings.WebHeadPath);
 }
