@@ -35,7 +35,7 @@
             activeClass = "hn-active";
             checkedAttribute = "checked";
         }
-        else if (sourcePage.Url != "/" && sourcePage.Url.Count(c => c == '/') >= 2 && AppPath.IsParentUrl(sourcePage.Url, activePage.Url))
+        else if (sourcePage.Url != "/" && sourcePage.Url.Count(c => c == '/') >= 3 && AppPath.IsParentUrl(sourcePage.Url, activePage.Url))
         {
             activeClass = "hn-active-child";
             checkedAttribute = "checked";
