@@ -9,6 +9,6 @@
 @inject RequestState RequestState;
 
 @{
-    var footerContent = await SourcePage.LoadPageFromAppPath(GeneralSettings.WebFooterPath);
+    var footerContent = await SourcePage.LoadPageFromUrl(AppUrl.Join(UrlSettings.GeneralRootUrl, "footer"));
     await footerContent.Render(this, this.Html);
 }

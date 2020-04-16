@@ -1,5 +1,6 @@
 ﻿@using CommunicatorCms.Core;
 @using CommunicatorCms.Core.Settings;
+@using CommunicatorCms.Core.AppFileSystem;
 
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/bulmaswatch/cyborg/bulmaswatch.min.css" />
 <link rel="stylesheet" href="~/static/themes/DefaultTheme/lib/remixicon/remixicon.css" />
@@ -17,5 +18,5 @@
 </script>
 
 @{
-    var headContent = await SourcePage.LoadPageFromAppPath(GeneralSettings.WebHeadPath);
+    var headContent = await SourcePage.LoadPageFromUrl(AppUrl.Join(UrlSettings.GeneralRootUrl, "head"));
 }
