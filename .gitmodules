@@ -1,0 +1,3 @@
+[submodule "lib/hyper-nav"]
+	path = lib/hyper-nav
+	url = https://github.com/Adamantica/HyperNav.git
